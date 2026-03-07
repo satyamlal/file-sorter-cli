@@ -44,7 +44,7 @@ cargo build --release
 ./target/release/r-organizer --path ~/Downloads
 ```
 
----
+----
 
 ## Contributing
 
