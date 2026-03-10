@@ -26,10 +26,13 @@ fn main() {
     println!("Scanning directory: {}", directory_path);
 
     for entry in entries {
-        let entry = entry.unwrap_or_else(|error| {
-            eprintln!("Error reading the file: {}", error);
-            process::exit(1);
-        });
+        let entry = match entry {
+            OK(e) => e,
+            Err(err) => {
+                eprintln!("Warning: Skipping a file due to error: {}", err);
+                continue;
+            }
+        }
 
         let path = entry.path();
         println!("Found!: {}", path.display());
