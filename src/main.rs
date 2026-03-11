@@ -27,7 +27,7 @@ fn main() {
 
     for entry in entries {
         let entry = match entry {
-            OK(e) => e,
+            Ok(e) => e,
             Err(err) => {
                 eprintln!("Warning: Skipping a file due to error: {}", err);
                 continue;
@@ -36,6 +36,14 @@ fn main() {
 
         let path = entry.path();
         println!("Found!: {}", path.display());
+
+        if let Ok(metadata) = entry.metadata() {
+            if !metadata.is_file() {
+                continue;
+            }
+        } else {
+            continue;
+        }
 
         let extension = path.extension().and_then(|s| s.to_str());
 
