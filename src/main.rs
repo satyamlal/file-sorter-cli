@@ -62,6 +62,11 @@ fn main() {
         if let Some(file_name) = path.file_name() {
             let dest_path = dest_dir.join(file_name);
 
+            if dest_path.exists() {
+                eprintln!("Warning: File {:?} already exists in the target folder. SKIPPING THIS FILE.", file_name);
+                continue;
+            }
+
             println!("Moving {:?} to {}", path.file_name().unwrap(), target_folder);
             fs::rename(&path, dest_path).unwrap_or_else(|err| {
                 eprintln!("Move failed: {}", err);
