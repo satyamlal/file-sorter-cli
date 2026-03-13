@@ -1,4 +1,5 @@
 use std::{
+    anyhow::{Context, Result},
     env,
     io,
     fs,
@@ -7,7 +8,7 @@ use std::{
     ffi::OsStr,
 };
 
-fn main() {
+fn main() -> Result<()>{
     let args:Vec<String> = env::args().collect();
 
     if args.len() < 2 {
@@ -18,10 +19,7 @@ fn main() {
 
     let directory_path = &args[1];
 
-    let entries = fs::read_dir(&directory_path).unwrap_or_else(|err| {
-        eprintln!("Error reading directory!: {} {}", directory_path, err);
-        process::exit(1);
-    });
+    let entries = fs::read_dir(&directory_path).with_context(|| eprintln!("Critical Failure: Unable to read directory at path: {}", directory_path));
 
     println!("Scanning directory: {}", directory_path);
 
@@ -73,4 +71,5 @@ fn main() {
             });
         }
     }
+    Ok(())
 }
